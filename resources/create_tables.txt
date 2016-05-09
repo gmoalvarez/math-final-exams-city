@@ -1,0 +1,36 @@
+use final_exams_summer_2016;
+
+drop table if exists student;
+drop table if exists examSession;
+drop table if exists enrollment;
+
+create table student(
+    studentId  int NOT NULL,
+    courseCRN  int NOT NULL,
+    firstName   varchar(20) NOT NULL,
+    lastName    varchar(20) NOT NULL,
+    primary key(studentId)
+    );
+
+create table examSession(
+    examSessionId   int NOT NULL,
+    dateTime        datetime NOT NULL,
+    seatsAvailable  int NOT NULL,
+    primary key(examSessionId)
+    );
+
+create table enrollment(
+    studentId int NOT NULL,
+    examSessionId int NOT NULL,
+    foreign key (studentId) references student(studentId),
+    foreign key (examSessionId) references examSession(examSessionId)
+    );
+
+#####//Create exam Sessions ------
+
+insert into examSession(examSessionId, dateTime, seatsAvailable)
+            values (1,'2016-07-20 02:00:00', 40),
+                   (2,'2016-07-20 04:00:00', 40),
+                   (3,'2016-07-21 02:00:00', 40),
+                   (4,'2016-07-21 02:00:00', 40)
+                   ;
