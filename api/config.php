@@ -11,3 +11,7 @@ $config = array(
         )
     )
 );
+$GLOBALS['dbname'] = "final_exams_summer_2016";
+$GLOBALS['dbusername'] = 'root';
+$GLOBALS['dbpassword'] = 'root';
+$GLOBALS['dbhost'] = 'localhost';

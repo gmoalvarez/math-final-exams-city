@@ -107,7 +107,29 @@ class DatabaseHelper
             echo $e->getMessage();
         }
     }
-
+    
+    //Decrement the specified column by one.
+    //$row contains the key value pairs that tell us how to narrow down the search
+    public function reduceByOne($table, $column, $row)
+    {
+        $sql = "update $table set $column = $column - 1 where ";
+        foreach ($row as $key => $value) {
+            $sql = $sql . $key . "=" . "'$value'";
+            if ($value != end($row)) {
+                $sql = $sql . " AND ";
+            }
+        }
+        $sql = $sql . ";";
+        try {
+            $dbHandle = $this->getConnection();
+            $stmt = $dbHandle->prepare($sql);
+            $stmt->execute();
+            return $stmt;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+    
     public function executeQuery($sql) {
         try {
             $dbHandle = $this->getConnection();
@@ -117,5 +139,9 @@ class DatabaseHelper
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
+    }
+    
+    public function closeConnection() {
+        unset($this);
     }
 }

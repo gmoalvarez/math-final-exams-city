@@ -1,6 +1,6 @@
 <?php
 
-require_once 'getHelperFunctions.php';
+require_once 'apiHelperFunctions.php';
 $dbHost = "localhost";
 $dbName = "final_exams_summer_2016";
 $dbUser = "root";
@@ -21,105 +21,61 @@ $dbPass = "root";
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['enrollment'])) {
         //Lets get the request. The possibilities are:
-            //1 - all
-            //2 - crn
-            //3 - datetime
+            //1 - all    //get all enrolled students
+            //2 - crn    //get all enrolled students given a crn
+            //3 - datetime  //get all students enrolled in a particular session
+
         $request = $_GET['enrollment'];
         switch ($request) {
-            case 'all':
-                echo json_encode(getAllStudents());
+            case 'all': //1 - get all students
+                echo json_encode(getStudents());
                 break;
-            case 'crn':
+            case 'crn': //2 - crn    //get all enrolled students given a crn
                 if (isset($_GET['crn'])) {
-                    getStudentsWithCRN($_GET['crn']);
+                    echo json_encode(getStudents("crn",$_GET['crn']));
                 } else {
-                    //Error. We need a CRN to do this
+                    error_log('//Error. We need a CRN to do this');
+                    exit(1);
                 }
                 break;
-            case 'date':
+            case 'date': //3 - datetime  //get all students enrolled in a particular session
                 if (isset($_GET['date'])) {
-                    getStudentsOnDate($_GET['date']);
+                    echo json_encode(getStudents("date",null, $_GET['date']));
                 } else {
-                    //ERROR. We need a date!
+                    error_log('//ERROR. We need a date!');
+                    exit(1);
                 }
                 break;
             default:
-                //Not a recognized request!
+                error_log('//Not a recognized request!');
+                exit(1);
         }
-    }
-
-    if (isset($_GET['list'])) { //Fetch list of some videos, students, or courses
-        $listRequest = $_GET['list'];
-        if ($listRequest === 'video') {
-            //This means we want a list of videos
-            if (isset($_GET['student_id'])) {
-                //4) list of videos that a student has watched?list=video&student_id=student_id
-                $studentId = $_GET['student_id'];
-                echo json_encode(getList('student', null, $studentId));
-            } else {
-                //1) Video List ?list=video
-                echo json_encode(getList());
-            }
-        } else if ($listRequest === 'student') {//we want a list of students
-            //3) list of students that have watched video ?list=student&video_id=youtube_id
-            //This means we want the list of students that have watched
-            //a particular video
-
-            //we need a video id to get the list of students
-            if (isset($_GET['video_id'])) {
-                $videoId = $_GET['video_id'];
-                echo json_encode(getList('student',$videoId));
-            }
-
-
-            //5) list of students in course ?list=student&course_id=course_id
-            //This means we want the list of students in a particular course
-            if (isset($_GET['course_id'])) {
-                $courseId = $_GET['course_id'];
-                echo json_encode(getList('student', null, null, $courseId));
-            }
-        } else if ($listRequest === 'course') {
-            //6) list of courses ?list=course
-            echo json_encode(getList('course'));
-        }
-    } else if(isset($_GET['video_id'])) { //FETCH A SINGLE VIDEO
-        //2) video with youtube id &video_id=youtube_id
-        $videoId = $_GET['video_id'];
-        echo json_encode(getList('video', $videoId));
-    } else if (isset($_GET['course_id'])) {
-        $courseId = $_GET['course_id'];
-        //7) course info given id ?course_id=course_id
-        echo json_encode(getList('course', null, null, $courseId));
+    } else {
+        //Return an error header. Not a supported request
     }
 } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //1) Update watch list of student after they watch it
-    //The post request should contain both student id and video_id
+    //The supported POST requests are:
+    //1 - add a student to a specific exam session
+    //2 - change a student from one session to another
+    //3 - remove a student from a session
+
     $action = $_POST['action'];
     if (!isset($action)) {
         echo "ERROR, empty post request!";
         exit(1);
     }
-    if ($action === 'update-watch-count') {
-        $studentId = $_POST['student_id'];
-        $videoId = $_POST['video_id'];
-        //Check for null values and return error if there is one
-        if ($studentId === null || $videoId == null) {
-            echo "ERROR, we need both student id and video id to update";
-            exit(1);
-        }
+    
+    switch ($action) {
+        case 'add':
+            echo json_encode(addStudent());
+            break;
+        case 'remove':
+            echo json_encode(removeStudentFromSession());
+            break;
+        case 'change':
+            echo json_encode(changeStudent());
+            break;
 
-        //If the student has already watched this video, we will increment
-        //If the student has not watched the video, we will add it to the
-        //student_video table
-        //$count should equal to 1 since we are only changing one row
-        $count = changeWatchCount($studentId, $videoId, 1); //should return 1
-        if ($count === 1) {
-            echo "SUCCESSFULLY updated watch count";
-        } else {
-            echo "Count is $count but it should equal 1";
-        }
-    } else if ($action === 'register') {
-        processRegistration();
     }
 } else {
     echo "No GET OR POST!!! YIKES!";

@@ -5,7 +5,7 @@
     <databaseInfo>
         <version>134481920</version>
         <UUID>DFA31089-9685-4120-9E62-53F761B552A2</UUID>
-        <nextObjectID>108</nextObjectID>
+        <nextObjectID>120</nextObjectID>
         <metadata>
             <plist version="1.0">
                 <dict>
@@ -78,7 +78,7 @@
         <attribute name="followredirects" type="bool">0</attribute>
         <attribute name="order" type="int64">0</attribute>
         <attribute name="name" type="string">Fetch all enrolled students</attribute>
-        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z114"></relationship>
         <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
         <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z106"></relationship>
     </object>
@@ -115,5 +115,153 @@
         <attribute name="uuid" type="string">37BAE783-0AA1-4898-800E-08E42547B6F4</attribute>
         <attribute name="order" type="int64">1</attribute>
         <attribute name="name" type="string">Default Jar</attribute>
+    </object>
+    <object type="LMREQUEST" id="z109">
+        <attribute name="uuid" type="string">27B464EE-5F16-4831-851E-E8C500B1ECC3</attribute>
+        <attribute name="url" type="string">http://localhost:8888/math_final_exams-API/api/mathFinals.php?enrollment=crn\u2600crn=123123</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">GET</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">1</attribute>
+        <attribute name="name" type="string">Fetch students in course with crn</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z114"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z110"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z110">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z109"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z111">
+        <attribute name="uuid" type="string">9345044B-7CBB-4280-A608-AE9DC8F343B4</attribute>
+        <attribute name="url" type="string">http://localhost:8888/math_final_exams-API/api/mathFinals.php?enrollment=date\u2600date=2016-07-20%2004%3A00%3A00</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">GET</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">2</attribute>
+        <attribute name="name" type="string">Fetch students in course with crn Duplicate</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z114"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z112"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z112">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z111"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z113">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z115"></relationship>
+    </object>
+    <object type="LMREQUESTGROUP" id="z114">
+        <attribute name="uuid" type="string">19CD9E1E-E937-4DFC-8979-A7F44CC03524</attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string">Get Requests</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM" idrefs="z103 z109 z111"></relationship>
+        <relationship name="bodyparameters" type="0/0" destination="LMKEYVALUE"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE"></relationship>
+        <relationship name="urlparameters" type="0/0" destination="LMKEYVALUE"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z115">
+        <attribute name="body" type="string">[{"data":{"keyValues":[[["firstName"],["Alyssa"],true],[["lastName"],["Astoria"],true],[["csid"],["231121"],true],[["crn"],["98981"],true],[["examSessionId"],["3"],true],[["action"],["add"],true]]},"identifier":"com.luckymarmot.BodyFormKeyValueDynamicValue"}]</attribute>
+        <attribute name="uuid" type="string">15B75EE8-9FCD-4E51-9BBD-5B6CA9EFFF85</attribute>
+        <attribute name="url" type="string">http://localhost:8888/math_final_exams-API/api/mathFinals.php</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">POST</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string">Add Student</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z116"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z113"></relationship>
+    </object>
+    <object type="LMREQUESTGROUP" id="z116">
+        <attribute name="uuid" type="string">49665DAB-6414-42AA-8B9C-165F049B302E</attribute>
+        <attribute name="order" type="int64">1</attribute>
+        <attribute name="name" type="string">Post Requests</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM" idrefs="z119 z115 z117"></relationship>
+        <relationship name="bodyparameters" type="0/0" destination="LMKEYVALUE"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE"></relationship>
+        <relationship name="urlparameters" type="0/0" destination="LMKEYVALUE"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z117">
+        <attribute name="uuid" type="string">1EABB830-49E6-469C-80CD-24E3AA9C893C</attribute>
+        <attribute name="url" type="string">http://localhost:8888/math_final_exams-API/api/mathFinals.php</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">POST</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="body" type="string">[{"data":{"keyValues":[[["csid"],["231121"],true],[["examSessionId"],["3"],true],[["action"],["remove"],true]]},"identifier":"com.luckymarmot.BodyFormKeyValueDynamicValue"}]</attribute>
+        <attribute name="order" type="int64">1</attribute>
+        <attribute name="name" type="string">Remove Student from enrollment</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z116"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z118"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z118">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z117"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z119">
+        <attribute name="uuid" type="string">9D636B17-2618-43B3-8F9F-E4DAD4F70E37</attribute>
+        <attribute name="url" type="string">http://localhost:8888/math_final_exams-API/api/mathFinals.php</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">POST</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="body" type="string">[{"data":{"keyValues":[[["csid"],["232121"],true],[["action"],["change"],true],[["examSessionId"],["3"],true]]},"identifier":"com.luckymarmot.BodyFormKeyValueDynamicValue"}]</attribute>
+        <attribute name="order" type="int64">2</attribute>
+        <attribute name="name" type="string">Change Student Session</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z116"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z120"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z120">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z119"></relationship>
     </object>
 </database>
