@@ -34,3 +34,20 @@ insert into examSession(examSessionId, dateTime, seatsAvailable)
                    (3,'2016-07-21 02:00:00', 40),
                    (4,'2016-07-21 02:00:00', 40)
                    ;
+
+##Create mock students ------
+
+insert into student(studentId, courseCRN, firstName, lastName)
+            values (111111, 123123, 'Guillermo', 'Alvarez'),
+                   (111112, 123123, 'Cheryl', 'Alvarez'),
+                   (111113, 456456, 'Naomi', 'Alvarez'),
+                   (111114, 456456, 'Audrey', 'Alvarez'),
+                   (111115, 123123, 'Pablo', 'Alvarez')
+                    ;
+
+insert into enrollment(studentId, examSessionId)
+            values (111111, 2),
+                   (111112, 1),
+                   (111113, 3),
+                   (111114, 4)
+                   ;

@@ -2,14 +2,52 @@
 
 require_once 'getHelperFunctions.php';
 $dbHost = "localhost";
-$dbName = "calcsuccess1";
+$dbName = "final_exams_summer_2016";
 $dbUser = "root";
 $dbPass = "root";
 //
 // session_start();
-//API for calcsuccess website. The different actions we should be able to perform are:
+//API for math final exams website. The different actions we should be able to perform are:
 //GET Requests (in no particular order):
+// Get the list of exam sessions
+// Get the enrollment list
+//   Get the enrollment list by CRN
+//   Get the enrollment list by DateTime
+
+//POST Requests (in no particular order):
+//  Add a student to an enrollment list
+//  Remove a student from an enrollment list
+//  Change a student from one section to another
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (isset($_GET['enrollment'])) {
+        //Lets get the request. The possibilities are:
+            //1 - all
+            //2 - crn
+            //3 - datetime
+        $request = $_GET['enrollment'];
+        switch ($request) {
+            case 'all':
+                echo json_encode(getAllStudents());
+                break;
+            case 'crn':
+                if (isset($_GET['crn'])) {
+                    getStudentsWithCRN($_GET['crn']);
+                } else {
+                    //Error. We need a CRN to do this
+                }
+                break;
+            case 'date':
+                if (isset($_GET['date'])) {
+                    getStudentsOnDate($_GET['date']);
+                } else {
+                    //ERROR. We need a date!
+                }
+                break;
+            default:
+                //Not a recognized request!
+        }
+    }
+
     if (isset($_GET['list'])) { //Fetch list of some videos, students, or courses
         $listRequest = $_GET['list'];
         if ($listRequest === 'video') {
