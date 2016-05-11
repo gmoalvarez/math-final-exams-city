@@ -1,5 +1,5 @@
 import {Component} from "angular2/core";
-import {Student} from "./Student";
+import {Student} from "./student";
 import {NgForm} from "angular2/common";
 import {ExamSession} from "./exam-session";
 
