@@ -6,8 +6,17 @@ function getExamSessionAvailability() {
     try {
         $dbHelper = new DatabaseHelper($GLOBALS['dbhost'], $GLOBALS['dbname'], $GLOBALS['dbusername'], $GLOBALS['dbpassword']);
         $dbHandle = $dbHelper->getConnection();
-//        $sql = "SELECT examSessionId"
-        //TODO: Finish code to get Exam Session Availability
+        $sql = "SELECT examSessionId, dateTime, seatsAvailable
+                    FROM examSession";
+        $stmt = $dbHandle->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!$result) {
+            return "NO RESULT FROM SQL!";
+        }
+        $dbHandle = null;
+        return $result;
     } catch(PDOException $e) {
         return $e->getMessage();
     }

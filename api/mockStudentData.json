@@ -1,0 +1,56 @@
+[
+  {
+    "studentId": 111111,
+    "courseCRN": 123123,
+    "firstName": "Guillermo",
+    "lastName": "Alvarez"
+  },
+  {
+    "studentId": 111112,
+    "courseCRN": 123123,
+    "firstName": "Cheryl",
+    "lastName": "Alvarez"
+  },
+  {
+    "studentId": 111113,
+    "courseCRN": 456456,
+    "firstName": "Naomi",
+    "lastName": "Alvarez"
+  },
+  {
+    "studentId": 111114,
+    "courseCRN": 456456,
+    "firstName": "Audrey",
+    "lastName": "Alvarez"
+  },
+  {
+    "studentId": 111115,
+    "courseCRN": 123123,
+    "firstName": "Pablo",
+    "lastName": "Alvarez"
+  },
+  {
+    "studentId": 121431,
+    "courseCRN": 87453,
+    "firstName": "Alfred",
+    "lastName": "Winslow"
+  },
+  {
+    "studentId": 231121,
+    "courseCRN": 98981,
+    "firstName": "Alyssa",
+    "lastName": "Astoria"
+  },
+  {
+    "studentId": 232121,
+    "courseCRN": 98981,
+    "firstName": "Alyssa",
+    "lastName": "Aceves"
+  },
+  {
+    "studentId": 287124,
+    "courseCRN": 87453,
+    "firstName": "Albert",
+    "lastName": "Einstein"
+  }
+]

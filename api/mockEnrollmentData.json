@@ -1,0 +1,30 @@
+[
+  {
+    "studentId": 111111,
+    "examSessionId": 2
+  },
+  {
+    "studentId": 111112,
+    "examSessionId": 1
+  },
+  {
+    "studentId": 111113,
+    "examSessionId": 3
+  },
+  {
+    "studentId": 111114,
+    "examSessionId": 4
+  },
+  {
+    "studentId": 287124,
+    "examSessionId": 3
+  },
+  {
+    "studentId": 121431,
+    "examSessionId": 2
+  },
+  {
+    "studentId": 232121,
+    "examSessionId": 3
+  }
+]
