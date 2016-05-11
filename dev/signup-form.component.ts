@@ -2,23 +2,44 @@ import {Component} from "angular2/core";
 import {Student} from "./student";
 import {NgForm} from "angular2/common";
 import {ExamSession} from "./exam-session";
+import {DataService} from "./shared/data.service";
+import {OnInit} from "angular2/core";
 
 @Component({
     selector: 'my-signup',
-    templateUrl: 'app/signup-form.html'
+    templateUrl: 'app/signup-form.html',
+    providers: [
+        DataService
+    ]
 })
 
-export class SignupFormComponent {
+export class SignupFormComponent implements  OnInit{
+    constructor(private dataService:DataService) {}
+
     student = new Student('111111', 'Guillermo', 'Alvarez', '12343', '1');
     submitted = false;
-    sessions = [
-        new ExamSession('1', '05/19/2016', '03:00 PM', 40),
-        new ExamSession('2', '05/19/2016', '04:00 PM', 40 ),
-        new ExamSession('3', '05/19/2016', '05:00 PM', 40 ),
-        new ExamSession('4', '05/20/2016', '03:00 PM', 40 ),
-        new ExamSession('5', '05/20/2016', '04:00 PM', 40 ),
-        new ExamSession('6', '05/20/2016', '05:00 PM', 40 ),
-    ]
+    //sessions = [
+    //    new ExamSession('1', '05/19/2016', '03:00 PM', 40),
+    //    new ExamSession('2', '05/19/2016', '04:00 PM', 40 ),
+    //    new ExamSession('3', '05/19/2016', '05:00 PM', 40 ),
+    //    new ExamSession('4', '05/20/2016', '03:00 PM', 40 ),
+    //    new ExamSession('5', '05/20/2016', '04:00 PM', 40 ),
+    //    new ExamSession('6', '05/20/2016', '05:00 PM', 40 ),
+    //]
+    sessions: ExamSession[];
+    errorMessage: string;
+
+    ngOnInit() { this.getSessions()}
+
+    getSessions() {
+        this.dataService.getExamSessions()
+            .subscribe(
+                examSessions => {this.sessions = examSessions;
+                    console.log(examSessions);
+                },
+                error => this.errorMessage = error
+            )
+    }
 
     onSubmit() {
         this.submitted = true

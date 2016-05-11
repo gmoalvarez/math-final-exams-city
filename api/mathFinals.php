@@ -30,6 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             case 'all': //1 - get all students
                 echo json_encode(getStudents());
                 break;
+            case 'availability':
+                echo json_encode(getExamSessionAvailability());
+                break;
             case 'crn': //2 - crn    //get all enrolled students given a crn
                 if (isset($_GET['crn'])) {
                     echo json_encode(getStudents("crn",$_GET['crn']));

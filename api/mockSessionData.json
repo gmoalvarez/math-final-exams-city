@@ -1,0 +1,22 @@
+[
+  {
+    "examSessionId": 1,
+    "dateTime": "2016-05-19 15:00:00",
+    "seatsAvailable": 40
+  },
+  {
+    "examSessionId": 2,
+    "dateTime": "2016-05-19 17:00:00",
+    "seatsAvailable": 37
+  },
+  {
+    "examSessionId": 3,
+    "dateTime": "2016-05-20 15:00:00",
+    "seatsAvailable": 31
+  },
+  {
+    "examSessionId": 4,
+    "dateTime": "2016-05-20 17:00:00",
+    "seatsAvailable": 2
+  }
+]

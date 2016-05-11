@@ -3,6 +3,7 @@ import {SignupFormComponent} from "./signup-form.component";
 import {RouteConfig, ROUTER_DIRECTIVES} from "angular2/router";
 import {CheckDateComponent} from "./check-date.component";
 import {ChangeDateComponent} from "./change-date.component";
+import { HTTP_PROVIDERS } from 'angular2/http';
 
 @Component({
     selector: 'my-app',
@@ -15,7 +16,10 @@ import {ChangeDateComponent} from "./change-date.component";
   </nav>
         <router-outlet></router-outlet>
     `,
-    directives: [ROUTER_DIRECTIVES]
+    directives: [ROUTER_DIRECTIVES],
+    providers: [
+        HTTP_PROVIDERS
+    ]
 })
 
 @RouteConfig([

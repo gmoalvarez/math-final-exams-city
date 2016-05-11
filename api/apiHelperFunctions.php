@@ -2,16 +2,22 @@
 require_once 'config.php';
 require_once 'DatabaseHelper.php';
 
+function getExamSessionAvailability() {
+    try {
+        $dbHelper = new DatabaseHelper($GLOBALS['dbhost'], $GLOBALS['dbname'], $GLOBALS['dbusername'], $GLOBALS['dbpassword']);
+        $dbHandle = $dbHelper->getConnection();
+//        $sql = "SELECT examSessionId"
+        //TODO: Finish code to get Exam Session Availability
+    } catch(PDOException $e) {
+        return $e->getMessage();
+    }
+}
+
 function getStudents($type="all",
                      $crn = null,
                      $examSessionDate = null) {
-    $dbHost = $GLOBALS['dbhost'];
-    $dbName = $GLOBALS['dbname'];
-    $dbUser = $GLOBALS['dbusername'];
-    $dbPass = $GLOBALS['dbpassword'];
-    
     try {
-        $dbHelper = new DatabaseHelper($dbHost, $dbName, $dbUser, $dbPass);
+        $dbHelper = new DatabaseHelper($GLOBALS['dbhost'], $GLOBALS['dbname'], $GLOBALS['dbusername'], $GLOBALS['dbpassword']);
         $dbHandle = $dbHelper->getConnection();
         switch ($type) {
             case "all":
