@@ -1,8 +1,6 @@
 export class ExamSession {
-    id: string;
     date: string;
     time: string;
-    seatsAvailable: number;
 
     constructor(
         public id: string,
