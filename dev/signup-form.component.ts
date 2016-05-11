@@ -4,6 +4,7 @@ import {NgForm} from "angular2/common";
 import {ExamSession} from "./exam-session";
 import {DataService} from "./shared/data.service";
 import {OnInit} from "angular2/core";
+import {Observable} from "rxjs/Observable";
 
 @Component({
     selector: 'my-signup',
@@ -18,14 +19,6 @@ export class SignupFormComponent implements  OnInit{
 
     student = new Student('111111', 'Guillermo', 'Alvarez', '12343', '1');
     submitted = false;
-    //sessions = [
-    //    new ExamSession('1', '05/19/2016', '03:00 PM', 40),
-    //    new ExamSession('2', '05/19/2016', '04:00 PM', 40 ),
-    //    new ExamSession('3', '05/19/2016', '05:00 PM', 40 ),
-    //    new ExamSession('4', '05/20/2016', '03:00 PM', 40 ),
-    //    new ExamSession('5', '05/20/2016', '04:00 PM', 40 ),
-    //    new ExamSession('6', '05/20/2016', '05:00 PM', 40 ),
-    //]
     sessions: ExamSession[];
     errorMessage: string;
 
@@ -35,15 +28,27 @@ export class SignupFormComponent implements  OnInit{
         this.dataService.getExamSessions()
             .subscribe(
                 examSessions => {this.sessions = examSessions;
-                    console.log(examSessions);
+                    //console.log(examSessions);
                 },
                 error => this.errorMessage = error
             )
     }
 
+    //TODO: Right now we are not doing anything with the student that was added. In the future we might want to update
+    //a list of students that is saved somewhere. Maybe the one that has the list of all students enrolled in the exam
+    addStudent (student: Student) {
+        this.dataService.addStudent(student)
+                        .subscribe(
+                            student => {},
+                            error => this.errorMessage = <any>error
+                        );
+    }
+
     onSubmit() {
         this.submitted = true
     }
+
+
 
     // TODO: Remove this when we're done
     get diagnostic() {
