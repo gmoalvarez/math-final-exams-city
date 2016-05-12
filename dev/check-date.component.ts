@@ -2,13 +2,14 @@ import {Component} from "angular2/core";
 import {DataService} from "./shared/data.service";
 import {Student} from "./Student";
 import {ExamSession} from "./exam-session";
+import {ChangeDateComponent} from "./change-date.component";
 
 @Component({
     selector: 'my-check-date',
     template: `
         <div class="container">
             <h1>Check final exam date</h1>
-            <div [hidden]="submitted">
+            <div >
                 <form class="form" (ngSubmit)="onSubmit()" #checkDateForm="ngForm">
                     <div class="form-group">
                         <label for="csid">Student Id</label>
@@ -56,7 +57,18 @@ import {ExamSession} from "./exam-session";
                 
                 <div *ngIf="found">
                     <h1>Found student</h1>
+                    <div class="row">
+                        <div class="col-xs-3">Date</div>
+                        <div class="col-xs-9">{{session.date}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3">Time</div>
+                        <div class="col-xs-9">{{session.time}}</div>
+                    </div>
                 </div>
+                
+                <my-change-date></my-change-date>
+               
                 <div *ngIf="!found">
                     <h1>Did not find student in this course</h1>
                 </div>
@@ -64,6 +76,7 @@ import {ExamSession} from "./exam-session";
         </div>
 
     `,
+    directives: [ChangeDateComponent],
     providers: [DataService]
 })
 
@@ -76,8 +89,26 @@ export class CheckDateComponent {
     session: ExamSession;
     errorMessage: string;
 
+    getSessionDetails() {
+        this.dataService.getFinalExamSession(this.student)
+                        .subscribe(
+                            session => {
+                                console.log('The session that came back is');
+                                console.log(session);
+                                this.session = session[0];
+                                if (this.session) {
+                                    console.log('Found the session');
+                                    this.found = true;
+                                    console.log('It is ');
+                                    console.log(this.session);
+                                }
+                            },
+                            error => this.errorMessage = <any>error
+                        );
+    }
+
     onSubmit() {
-        
+        this.getSessionDetails();
         this.submitted = true;
     }
 }

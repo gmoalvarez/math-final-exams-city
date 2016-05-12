@@ -1,0 +1,13 @@
+{
+  "status":"ok",
+  "data": [
+    {
+      "studentId": "111111",
+      "examSessionId": "2",
+      "crn": "123123",
+      "firstName": "Guillermo",
+      "lastName": "Alvarez",
+      "dateTime": "2016-07-20 04:00:00"
+    }
+  ]
+}

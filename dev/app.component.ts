@@ -2,7 +2,6 @@ import {Component} from 'angular2/core';
 import {SignupFormComponent} from "./signup-form.component";
 import {RouteConfig, ROUTER_DIRECTIVES} from "angular2/router";
 import {CheckDateComponent} from "./check-date.component";
-import {ChangeDateComponent} from "./change-date.component";
 import { HTTP_PROVIDERS } from 'angular2/http';
 
 @Component({
@@ -11,8 +10,7 @@ import { HTTP_PROVIDERS } from 'angular2/http';
         <h1>San Diego City College Math Final Exams</h1>
   <nav>
     <button [routerLink]="['Signup']">Sign up</button>
-    <button [routerLink]="['CheckDate']">Check date</button>
-    <button [routerLink]="['ChangeDate']">Change date</button>
+    <button [routerLink]="['CheckDate']">Check/Change date</button>
   </nav>
         <router-outlet></router-outlet>
     `,
@@ -28,9 +26,6 @@ import { HTTP_PROVIDERS } from 'angular2/http';
     },
     {
         path: '/check-date', name: 'CheckDate', component: CheckDateComponent
-    },
-    {
-        path: '/change-date', name: 'ChangeDate', component: ChangeDateComponent
     }
 ])
 

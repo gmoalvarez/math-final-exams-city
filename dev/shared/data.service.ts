@@ -9,8 +9,11 @@ import {Headers, RequestOptions} from "angular2/http";
 export class DataService {
     constructor(private http:Http) { }
 
-    //private dataUrl = '../api/mathFinals.php'; //URL to web api
+    // private dataUrl = '../api/mathFinals.php'; //URL to web api
     private dataUrl = '../api/mockSessionData.json';
+    //These two mock data sources are used to test the check date functionality
+    private singleSessionUrl = '../api/mockSingleStudentSession.json'; //one result
+    // private singleSessionUrl = '../api/mockNoStudentSession.json';  //no result
 
     getExamSessions(): Observable<ExamSession[]> {
         //let parameters = '';
@@ -18,6 +21,13 @@ export class DataService {
             .map(this.extractData)
             .catch(this.handleError);
     }
+
+    getFinalExamSession(student:Student):Observable<ExamSession[]> {
+        return this.http.get(this.singleSessionUrl)
+            .map(this.extractData)
+            .catch(this.handleError)
+    }
+    
 
     addStudent(student: Student) : Observable<Student> {
         console.log('Adding student:');
@@ -36,9 +46,11 @@ export class DataService {
             throw new Error('Bad response status: ' + res.status);
         }
         let body = res.json();
+        console.log('The response that came back was');
+        console.log(body);
         //let examSessions = this.convertDataToExamSession(body);
         let examSessions: ExamSession[] = [];
-        for (let item of body) {
+        for (let item of body.data) {
             console.log(item);
             examSessions.push(
                 new ExamSession(item.examSessionId, item.dateTime, item.seatsAvailable)
