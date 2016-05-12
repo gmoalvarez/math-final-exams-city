@@ -4,15 +4,18 @@ import {ExamSession} from '../exam-session';
 import {Student} from '../student';
 import {Observable} from "rxjs/Observable";
 import {Headers, RequestOptions} from "angular2/http";
+//If we are going to test locally we need to use JSONP
+
 
 @Injectable()
 export class DataService {
     constructor(private http:Http) { }
 
-    // private dataUrl = '../api/mathFinals.php'; //URL to web api
-    private dataUrl = '../api/mockSessionData.json';
+    private dataUrl = 'http://localhost:8888/angular-2-mathfinalexams/api/mathFinals.php?enrollment=availability'; //URL to web api
+    private singleSessionUrl = './api/mathFinals.php';
+    // private dataUrl = '../api/mockSessionData.json';
     //These two mock data sources are used to test the check date functionality
-    private singleSessionUrl = '../api/mockSingleStudentSession.json'; //one result
+    // private singleSessionUrl = '../api/mockSingleStudentSession.json'; //one result
     // private singleSessionUrl = '../api/mockNoStudentSession.json';  //no result
 
     getExamSessions(): Observable<ExamSession[]> {
@@ -20,6 +23,9 @@ export class DataService {
         return this.http.get(this.dataUrl)
             .map(this.extractData)
             .catch(this.handleError);
+
+    //    IF WE NEED TO TEST LOCALLY WE NEED TO USE JSONP METHOD
+
     }
 
     getFinalExamSession(student:Student):Observable<ExamSession[]> {
@@ -50,7 +56,7 @@ export class DataService {
         console.log(body);
         //let examSessions = this.convertDataToExamSession(body);
         let examSessions: ExamSession[] = [];
-        for (let item of body.data) {
+        for (let item of body) {
             console.log(item);
             examSessions.push(
                 new ExamSession(item.examSessionId, item.dateTime, item.seatsAvailable)
@@ -72,6 +78,7 @@ export class DataService {
     }
 
     private handleError(error: any) {
+        console.log('There was an error');
         let errorMsg = error.message;
         console.log(errorMsg);
         return Observable.throw(errorMsg);
