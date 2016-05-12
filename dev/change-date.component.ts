@@ -1,4 +1,4 @@
-import {Component} from "angular2/core";
+import {Component, OnInit} from "angular2/core";
 import {Student} from "./Student";
 import {ExamSession} from "./exam-session";
 import {DataService} from "./shared/data.service";
@@ -37,7 +37,9 @@ import {DataService} from "./shared/data.service";
     directives: []
 })
 
-export class ChangeDateComponent {
+export class ChangeDateComponent implements OnInit{
+
+    ngOnInit() { this.getSessions()}
 
     constructor(private dataService: DataService) {}
 
