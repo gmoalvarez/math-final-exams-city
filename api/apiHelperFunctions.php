@@ -16,18 +16,21 @@ function getExamSessionAvailability() {
             return "NO RESULT FROM SQL!";
         }
         $dbHandle = null;
-        return $result;
+        return successResponse($result);
     } catch(PDOException $e) {
-        return $e->getMessage();
+        return errorResponse($e->getMessage());
+
     }
 }
 
 function getStudents($type="all",
                      $crn = null,
-                     $examSessionDate = null) {
+                     $examSessionDate = null,
+                     $id = null) {
     try {
         $dbHelper = new DatabaseHelper($GLOBALS['dbhost'], $GLOBALS['dbname'], $GLOBALS['dbusername'], $GLOBALS['dbpassword']);
         $dbHandle = $dbHelper->getConnection();
+        $sql = '';
         switch ($type) {
             case "all":
                 $sql = "SELECT student.studentId, enrollment.examSessionId, courseCRN, firstName, lastName, dateTime
@@ -55,6 +58,15 @@ function getStudents($type="all",
                         ON enrollment.examSessionId=examSession.examSessionId
                       WHERE dateTime='$examSessionDate';";
                 break;
+            case "single":
+                $sql = "SELECT student.studentId, enrollment.examSessionId, courseCrn, firstName, lastName, dateTime
+                        FROM enrollment
+                          INNER JOIN student
+                            ON enrollment.studentId=student.studentId
+                          INNER JOIN examSession
+                            ON enrollment.examSessionId=examSession.examSessionId
+                          WHERE student.courseCRN=$crn AND student.studentId=$id;";
+                break;
             default:
                 //Should not be requested
                 echo "Unknown request";
@@ -65,24 +77,21 @@ function getStudents($type="all",
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (!$result) {
-            return "NO RESULT FROM SQL!";
+            return errorResponse('no result from database');
+            exit(1);
         }
         $dbHandle = null;
-        return $result;
+        return successResponse($result);
 
     } catch(PDOException $e) {
-        return $e->getMessage();
+        return errorResponse($e->getMessage());
     }
 }
 
 function addStudent() {
-    $dbHost = $GLOBALS['dbhost'];
-    $dbName = $GLOBALS['dbname'];
-    $dbUser = $GLOBALS['dbusername'];
-    $dbPass = $GLOBALS['dbpassword'];
 
     try {
-        $dbHelper = new DatabaseHelper($dbHost, $dbName, $dbUser, $dbPass);
+        $dbHelper = new DatabaseHelper($GLOBALS['dbhost'], $GLOBALS['dbname'], $GLOBALS['dbusername'], $GLOBALS['dbpassword']);
 
         $row = array(
             "studentId" => "$_POST[csid]",
@@ -100,6 +109,7 @@ function addStudent() {
         //two requests come in at the same time?
         if (!seatAvailableInSessionWithId($_POST['examSessionId'])) {
             return errorResponse('This session is currently full. Please choose another session');
+            exit(1);
         }
         //The student is not enrolled in a session, lets add them to the student table
         $dbHelper->insert('student', $row);
@@ -208,96 +218,6 @@ function removeStudentFromSession() {
     }
 }
 
-//Change the watch count. Typically byAmount will equal to 1 but if we want to change it
-//by a different amount we can do so by changing that value.
-//The return value is the number of rows that were affected (should be 1)
-function changeWatchCount($studentId, $videoId, $byAmount) {
-    $dbHost = $GLOBALS['dbhost'];
-    $dbName = $GLOBALS['dbname'];
-    $dbUser = $GLOBALS['dbusername'];
-    $dbPass = $GLOBALS['pass'];
-    try {
-        $dbHelper = new DatabaseHelper($dbHost,$dbName,$dbUser,$dbPass);
-        $dbHandle = $dbHelper->getConnection();
-
-        $row = array("video_id" => "$videoId", "student_id" => $studentId);
-        if ($dbHelper->exists('student_video',$row)) { //if student has already watched this video, update it
-            $sql = "UPDATE student_video 
-                SET watch_count = watch_count + $byAmount 
-                WHERE video_id='$videoId' 
-                AND student_id=$studentId;";
-            $count = $dbHandle->exec($sql);
-        } else { //if the student has never watched the video, lets add it to the student_video table
-            $row = array(
-                'video_id' => $videoId,
-                'student_id' => $studentId,
-                'watch_count' => 1
-            );
-            $count = $dbHelper->insert('student_video',$row);
-        }
-
-        return $count;
-    } catch(PDOException $e) {
-        return $e->getMessage();
-    }
-}
-
-function processRegistration() {
-    $studentId = trim($_POST['student_id']);
-    $firstName = trim($_POST['first_name']);
-    $lastName = trim($_POST['last_name']);
-    $userEmail = trim($_POST['user_email']);
-    $userPassword = trim($_POST['password']);
-    $courseId = trim($_POST['course_id']);
-    $password = password_hash($userPassword, PASSWORD_DEFAULT)."\n";
-
-    $dbHost = $GLOBALS['dbhost'];
-    $dbName = $GLOBALS['dbname'];
-    $dbUser = $GLOBALS['dbusername'];
-    $dbPass = $GLOBALS['dbpassword'];
-
-    try {
-        $dbHelper = new DatabaseHelper($dbHost,$dbName,$dbUser,$dbPass);
-
-        //First we check to see if the student is already registered
-        if ($dbHelper->exists('student',array('email'=>$userEmail))) {
-            echo "User already has an account. Please login";
-            return false;
-        }
-
-        //Lets also make sure the course id is valid
-        if (!$dbHelper->exists('course',array('course_id'=>$courseId))) {
-            echo "Course not found. Please enter a correct course id";
-            return false;
-        }
-
-        //At this point we know that the user does not already exist and the course id is valid
-        //Lets add the student to the student table and the enrollment table to sign in
-        //to the course
-        $studentRow = array(
-            'id' => $studentId,
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'email' => $userEmail ,
-            'password' => $password
-        );
-        $dbHelper->insert('student',$studentRow);
-
-        echo "OK, we inserted the student!\n";
-
-        //Now lets update the enrollment table
-        $enrollmentRow = array(
-            'student_id' => $studentId,
-            'course_id' => $courseId
-        );
-        $dbHelper->insert('enrollment',$enrollmentRow);
-        echo "OK, we updated the enrollment list!\n";
-
-    } catch(PDOException $e) {
-        echo $e->getMessage();
-    }
-}
-
 function seatAvailableInSessionWithId($id) {
     $dbHelper = new DatabaseHelper($GLOBALS['dbhost'],$GLOBALS['dbname'],$GLOBALS['dbusername'],$GLOBALS['dbpassword']);
     $dbHandle = $dbHelper->getConnection();
@@ -314,6 +234,14 @@ function seatAvailableInSessionWithId($id) {
 function errorResponse($message) {
     return array(
             'status' => 'error',
-            'message' => $message
+            'message' => $message,
+            'data' => ''
            );
+}
+
+function successResponse($data) {
+    return array(
+        'status' => 'ok',
+        'data' => $data
+    );
 }

@@ -18,13 +18,14 @@ $dbPass = "root";
 //  Add a student to an enrollment list
 //  Remove a student from an enrollment list
 //  Change a student from one section to another
+//TODO: Add ability to get single session from a single student
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['enrollment'])) {
         //Lets get the request. The possibilities are:
             //1 - all    //get all enrolled students
             //2 - crn    //get all enrolled students given a crn
-            //3 - datetime  //get all students enrolled in a particular session
-
+            //3 - date  //get all students enrolled in a particular session
+            //4 - id and crn //get session of a single student with id and crn
         $request = $_GET['enrollment'];
         switch ($request) {
             case 'all': //1 - get all students
@@ -35,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 break;
             case 'crn': //2 - crn    //get all enrolled students given a crn
                 if (isset($_GET['crn'])) {
-                    echo json_encode(getStudents("crn",$_GET['crn']));
+                    echo json_encode(getStudents("crn",$_GET['crn'], null, null));
                 } else {
                     error_log('//Error. We need a CRN to do this');
                     exit(1);
@@ -43,10 +44,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 break;
             case 'date': //3 - datetime  //get all students enrolled in a particular session
                 if (isset($_GET['date'])) {
-                    echo json_encode(getStudents("date",null, $_GET['date']));
+                    echo json_encode(getStudents("date",null, $_GET['date'], null));
                 } else {
                     error_log('//ERROR. We need a date!');
                     exit(1);
+                }
+                break;
+            case 'single': //4 -single id and crn //get session of a single student with id and crn
+                if(isset($_GET['crn']) && isset($_GET['csid'])) {
+                    echo json_encode(getStudents('single',$_GET['crn'],null, $_GET['csid']));
                 }
                 break;
             default:

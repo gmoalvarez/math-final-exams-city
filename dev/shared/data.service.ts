@@ -3,7 +3,7 @@ import {Http, Response} from 'angular2/http';
 import {ExamSession} from '../exam-session';
 import {Student} from '../student';
 import {Observable} from "rxjs/Observable";
-import {Headers, RequestOptions} from "angular2/http";
+import {Headers, RequestOptions, URLSearchParams} from "angular2/http";
 //If we are going to test locally we need to use JSONP
 
 
@@ -11,8 +11,9 @@ import {Headers, RequestOptions} from "angular2/http";
 export class DataService {
     constructor(private http:Http) { }
 
+    private API_URL = 'http://localhost:8888/angular-2-mathfinalexams/api/mathFinals.php'
     private dataUrl = 'http://localhost:8888/angular-2-mathfinalexams/api/mathFinals.php?enrollment=availability'; //URL to web api
-    private singleSessionUrl = './api/mathFinals.php';
+    private singleSessionUrl = 'http://localhost:8888/math_final_exams-API/api/mathFinals.php?enrollment=single&crn=123123&csid=111111';
     // private dataUrl = '../api/mockSessionData.json';
     //These two mock data sources are used to test the check date functionality
     // private singleSessionUrl = '../api/mockSingleStudentSession.json'; //one result
@@ -24,12 +25,19 @@ export class DataService {
             .map(this.extractData)
             .catch(this.handleError);
 
-    //    IF WE NEED TO TEST LOCALLY WE NEED TO USE JSONP METHOD
-
     }
 
     getFinalExamSession(student:Student):Observable<ExamSession[]> {
-        return this.http.get(this.singleSessionUrl)
+        //TODOD: Add parameters to this request to make sure we get the correct student
+        let params = new URLSearchParams();
+        params.set('enrollment', 'single');
+        params.set('crn', student.crn);
+        params.set('csid', student.id);
+        console.log('Getting final exam session for student');
+        console.log(student);
+        console.log('The params that we are sending are');
+        console.log(params);
+        return this.http.get(this.API_URL, {search: params})
             .map(this.extractData)
             .catch(this.handleError)
     }
@@ -56,7 +64,7 @@ export class DataService {
         console.log(body);
         //let examSessions = this.convertDataToExamSession(body);
         let examSessions: ExamSession[] = [];
-        for (let item of body) {
+        for (let item of body.data) {
             console.log(item);
             examSessions.push(
                 new ExamSession(item.examSessionId, item.dateTime, item.seatsAvailable)
@@ -67,7 +75,7 @@ export class DataService {
 
     private convertDataToExamSession(body) {
         let examSessions: ExamSession[];
-        for (let item of body) {
+        for (let item of body.data) {
             //console.log(item);
             examSessions.push(
                 new ExamSession(item.id, item.dateTime, item.seatsAvailable)

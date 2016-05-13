@@ -14,7 +14,7 @@ import {ChangeDateComponent} from "./change-date.component";
                     <div class="form-group">
                         <label for="csid">Student Id</label>
                         <input [(ngModel)]="student.id"
-                               ngControl="studentId" #studentId="ngForm"
+                               ngControl="csid" #studentId="ngForm"
                                type="text" class="form-control" required>
                         <div [hidden]="studentId.valid || studentId.pristine"
                              class="alert alert-danger">
@@ -44,7 +44,7 @@ import {ChangeDateComponent} from "./change-date.component";
             </div>
         
             <!--Confirmation Message-->
-            <div [hidden]="!submitted">
+            <div [hidden]="!submitted || !found">
                 <h2>You submitted the following:</h2>
                 <div class="row">
                     <div class="col-xs-3">Student ID</div>
@@ -68,10 +68,10 @@ import {ChangeDateComponent} from "./change-date.component";
                 </div>
                 
                 <my-change-date></my-change-date>
-               
-                <div *ngIf="!found">
-                    <h1>Did not find student in this course</h1>
-                </div>
+
+            </div>
+            <div *ngIf="!found && submitted">
+                <h1>Did not find student in this course</h1>
             </div>
         </div>
 
@@ -96,11 +96,14 @@ export class CheckDateComponent {
                                 console.log('The session that came back is');
                                 console.log(session);
                                 this.session = session[0];
+                                this.submitted = true;
                                 if (this.session) {
                                     console.log('Found the session');
                                     this.found = true;
                                     console.log('It is ');
                                     console.log(this.session);
+                                } else {
+                                    this.found = false;
                                 }
                             },
                             error => this.errorMessage = <any>error
@@ -109,6 +112,5 @@ export class CheckDateComponent {
 
     onSubmit() {
         this.getSessionDetails();
-        this.submitted = true;
     }
 }

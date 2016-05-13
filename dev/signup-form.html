@@ -25,7 +25,7 @@
             <div class="form-group">
                 <label for="csid">Student ID</label>
                 <input [(ngModel)]="student.id"
-                       ngControl="id" #studentId="ngForm"
+                       ngControl="csid" #studentId="ngForm"
                        type="text" class="form-control" required>
                 <div [hidden]="studentId.valid || studentId.pristine"
                      class="alert alert-danger">
