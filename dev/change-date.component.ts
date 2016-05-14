@@ -53,17 +53,18 @@ import {DataService} from "./shared/data.service";
             <div class="col-xs-9 pull-left">{{ student.id }}</div>
         </div>
         <div class="row">
-            <div class="col-xs-3">Date</div>
-            <div class="col-xs-9 pull-left">{{ student.id }}</div>
+            <div class="col-xs-3">Exam Session id</div>
+            <div class="col-xs-9 pull-left">{{ student.examSessionId }}</div>
         </div>
+        <!--<div class="row">-->
+            <!--<div class="col-xs-3">Date</div>-->
+            <!--<div class="col-xs-9 pull-left">{{ currentSession.dateTime }}</div>-->
+        <!--</div>-->
         <div class="row">
             <div class="col-xs-3">CRN</div>
             <div class="col-xs-9 pull-left">{{ student.crn }}</div>
         </div>
-        <div class="row">
-            <div class="col-xs-3">Exam Session id</div>
-            <div class="col-xs-9 pull-left">{{ student.examSessionId }}</div>
-        </div>
+
     </div>
     `,
     providers: [DataService],
@@ -81,6 +82,7 @@ export class ChangeDateComponent implements OnInit{
     currentSession: ExamSession;
     errorMessage: string;
     submitted = false;
+    found = false;
     sessions: ExamSession[];
 
     getSessions() {
@@ -107,6 +109,10 @@ export class ChangeDateComponent implements OnInit{
                     console.log(student);
                     this.getSessions();
                     this.student.examSessionId = student.examSessionId;
+                    this.currentSession = <ExamSession>this.sessions.filter(session=>session.id == student.examSessionId)[0];
+                    console.log('The new current session is ');
+                    console.log(this.currentSession);
+                    //TODO: This returns an array with a single element. fix it
                 },
                 error => this.errorMessage = <any>error
             );

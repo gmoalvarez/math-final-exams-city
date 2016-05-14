@@ -22,12 +22,12 @@ export class DataService {
     getExamSessions(): Observable<ExamSession[]> {
         //let parameters = '';
         return this.http.get(this.dataUrl)
-            .map(this.extractData)
+            .map(this.extractMultipleSessionsData)
             .catch(this.handleError);
 
     }
 
-    getFinalExamSession(student:Student):Observable<ExamSession[]> {
+    getFinalExamSession(student:Student):Observable<{student: Student, session: ExamSession}> {
         //TODOD: Add parameters to this request to make sure we get the correct student
         let params = new URLSearchParams();
         params.set('enrollment', 'single');
@@ -92,28 +92,28 @@ export class DataService {
         } else if (action === 'change') {
             console.log('changing student');
             return this.http.post(this.API_URL, query, options)
-                .map(this.extractIdData)
+                .map(this.extractData)
                 .catch(this.handleError);
         } else {
             console.log('There seems to be an error');
         }
     }
 
-    private extractIdData(res: Response) {
-        console.log('The response object (from extractIdData is');
+    private extractData(res: Response) {
+        console.log('The response object (from extractData) is');
         console.log(res);
         if (res.status < 200 || res.status > 300) {
             throw new Error('Bad response status: ' + res.status);
         }
         let body = res.json();
-        console.log('The response that came back(from changing the student was');
+        console.log('The response that came back(from changing or adding the student) was');
         console.log(body);
         return body.data || {};
     }
 
 
 
-    private extractData(res: Response) {
+    private extractMultipleSessionsData(res: Response) {
         console.log('The response object is');
         console.log(res);
         if (res.status < 200 || res.status > 300) {

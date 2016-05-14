@@ -93,41 +93,53 @@ function addStudent() {
 //    var_dump($_POST);
     try {
         $dbHelper = new DatabaseHelper($GLOBALS['dbhost'], $GLOBALS['dbname'], $GLOBALS['dbusername'], $GLOBALS['dbpassword']);
-
-        $row = array(
+        $dbHandle = $dbHelper->getConnection();
+        $student = array(
             "studentId" => "$_POST[id]",
             "courseCRN" => "$_POST[crn]",
             "firstName" => "$_POST[firstName]",
             "lastName" => "$_POST[lastName]"
-            );
+        );
         //Lets first check to see if the student has already signed up. If so, we should
         //prompt them to change instead
-        if($dbHelper->exists("student", $row)) { 
+        $sql = "SELECT * FROM student WHERE studentId=$_POST[id]";
+//        error_log($sql);
+        $stmt = $dbHandle->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        error_log(count($result));
+        if(count($result) >=1) {
             return errorResponse('Student is already signed up. Change instead');
-            exit(1);
         }
         //Lets make sure there is enough space in a session (this is checked client side but what if
         //two requests come in at the same time?
         if (!seatAvailableInSessionWithId($_POST['examSessionId'])) {
             return errorResponse('This session is currently full. Please choose another session');
-            exit(1);
         }
         //The student is not enrolled in a session, lets add them to the student table
-        $dbHelper->insert('student', $row);
+        $dbHelper->insert('student', $student);
         //Now lets also add them to the enrollment table
-        $row = array(
+        $enrollment = array(
             "studentId" => "$_POST[id]",
             "examSessionId" => "$_POST[examSessionId]"
         );
-        $dbHelper->insert('enrollment', $row);
+        $dbHelper->insert('enrollment', $enrollment);
         //Now lets reduce the seats available for this session by one
-        $row = array (
+        $examSession = array (
             "examSessionId" => "$_POST[examSessionId]"
         );
-        $dbHelper->reduceByOne('examSession', 'seatsAvailable', $row);
+        $dbHelper->reduceByOne('examSession', 'seatsAvailable', $examSession);
         //If we make it here without any errors, lets return a success message
         $dbHelper->closeConnection();
-        return "success";
+        $responseData = array(
+            "studentId" => "$_POST[id]",
+            "courseCRN" => "$_POST[crn]",
+            "firstName" => "$_POST[firstName]",
+            "lastName" => "$_POST[lastName]",
+            "examSessionId" => "$_POST[examSessionId]"
+        );
+        return successResponse($responseData);
     } catch(PDOException $e) {
         return $e->getMessage();
     }

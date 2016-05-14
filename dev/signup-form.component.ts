@@ -19,6 +19,7 @@ export class SignupFormComponent implements  OnInit{
 
     student = new Student('111111', 'Guillermo', 'Alvarez', '12343', '1');
     submitted = false;
+    duplicate = false;
     sessions: ExamSession[];
     errorMessage: string;
 
@@ -37,7 +38,14 @@ export class SignupFormComponent implements  OnInit{
     addStudent (student: Student) {
         this.dataService.addStudent(student, 'add')
             .subscribe(
-                student => {},
+                student => {
+                    console.log('The response from addStudent is');
+                    console.log(student);
+                    if (Object.keys(student).length === 0 && student.constructor === Object) {
+                        console.log('Empty response!');
+                        console.log('We need to do something about this');
+                    }
+                },
                 error => this.errorMessage = <any>error
             );
     }

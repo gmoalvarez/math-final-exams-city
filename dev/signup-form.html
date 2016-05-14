@@ -1,5 +1,5 @@
 <div class="container">
-    <div [hidden]="submitted">
+    <div [hidden]="submitted && !duplicate">
         <h1>Signup Form</h1>
         <form class="form" (ngSubmit)="onSubmit()" #signupForm="ngForm">
             <div class="form-group">

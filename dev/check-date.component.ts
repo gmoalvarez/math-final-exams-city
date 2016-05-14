@@ -7,10 +7,10 @@ import {ChangeDateComponent} from "./change-date.component";
 @Component({
     selector: 'my-check-date',
     template: `
-        <div class="container">
+        <div  class="container">
             <h1>Check final exam date</h1>
             <div >
-                <form class="form" (ngSubmit)="onSubmit()" #checkDateForm="ngForm">
+                <form [hidden]="(submitted && found)" class="form" (ngSubmit)="onSubmit()" #checkDateForm="ngForm">
                     <div class="form-group">
                         <label for="csid">Student Id</label>
                         <input [(ngModel)]="student.id"
@@ -62,6 +62,10 @@ import {ChangeDateComponent} from "./change-date.component";
                         <div class="col-xs-9">{{student.firstName}} {{student.lastName}}</div>
                     </div>
                     <div class="row">
+                        <div class="col-xs-3">Exam Session Number</div>
+                        <div class="col-xs-9">{{session.id}}</div>
+                    </div>
+                    <div class="row">
                         <div class="col-xs-3">Date</div>
                         <div class="col-xs-9">{{session.date}}</div>
                     </div>
@@ -72,7 +76,8 @@ import {ChangeDateComponent} from "./change-date.component";
                 </div>
                 
                 <my-change-date [checkDateStudent]="student"
-                                [oldSession]="session"></my-change-date>
+                                [oldSession]="session"
+                                ></my-change-date>
 
             </div>
             <div *ngIf="!found && submitted">
@@ -98,11 +103,13 @@ export class CheckDateComponent {
         this.dataService.getFinalExamSession(this.student)
             .subscribe(
                 result => {
+                    interface result {
+                        student: Student,
+                        session: ExamSession
+                    }
                     console.log('The result that came back (from getFinalExamSession) is');
                     console.log(result);
-                    //noinspection TypeScriptUnresolvedVariable
                     this.session = result.session;
-                    //noinspection TypeScriptUnresolvedVariable
                     this.student = result.student;
                     this.submitted = true;
                     if (this.session && this.student) {

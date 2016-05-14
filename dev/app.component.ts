@@ -3,6 +3,7 @@ import {SignupFormComponent} from "./signup-form.component";
 import {RouteConfig, ROUTER_DIRECTIVES} from "angular2/router";
 import {CheckDateComponent} from "./check-date.component";
 import { HTTP_PROVIDERS } from 'angular2/http';
+import {ConfirmationComponent} from "./confirmation.component";
 
 @Component({
     selector: 'my-app',
@@ -26,6 +27,9 @@ import { HTTP_PROVIDERS } from 'angular2/http';
     },
     {
         path: '/check-date', name: 'CheckDate', component: CheckDateComponent
+    },
+    {
+        path: '/confirmation', name: 'Confirmation', component: ConfirmationComponent
     }
 ])
 
