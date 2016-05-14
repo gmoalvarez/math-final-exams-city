@@ -18,6 +18,7 @@ $dbPass = "root";
 //  Add a student to an enrollment list
 //  Remove a student from an enrollment list
 //  Change a student from one section to another
+//echo var_dump($_SERVER);
 //TODO: Add ability to get single session from a single student
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['enrollment'])) {
@@ -67,13 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     //1 - add a student to a specific exam session
     //2 - change a student from one session to another
     //3 - remove a student from a session
-
-    $action = $_POST['action'];
-    if (!isset($action)) {
+//    error_log(var_dump($_SERVER));
+//    error_log(var_dump($_POST));
+    if (!isset($_POST['action'])) {
         echo "ERROR, empty post request!";
         exit(1);
     }
-    
+    $action = $_POST['action'];
     switch ($action) {
         case 'add':
             echo json_encode(addStudent());

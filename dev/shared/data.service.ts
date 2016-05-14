@@ -38,24 +38,84 @@ export class DataService {
         console.log('The params that we are sending are');
         console.log(params);
         return this.http.get(this.API_URL, {search: params})
-            .map(this.extractData)
+            .map(this.extractSessionData)
             .catch(this.handleError)
     }
-    
 
-    addStudent(student: Student) : Observable<Student> {
-        console.log('Adding student:');
-        console.log(student);
-        let body = JSON.stringify(student);
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions({headers: headers});
+    extractSessionData(res: Response) {
+        console.log('The response object is (should be a single exam session)');
+        console.log(res);
+        if (res.status < 200 || res.status > 300) {
+            throw new Error('Bad response status: ' + res.status);
+        }
+        let body = res.json();
+        console.log('The response that came back was');
+        console.log(body);
 
-        return this.http.post(this.dataUrl, body, options)
-                        .map(this.extractData)
-                        .catch(this.handleError);
+        if (body.data) {
+            let single = body.data[0];
+            let student = new Student(single.studentId,
+                single.firstName,
+                single.lastName,
+                single.courseCrn,
+                single.examSessionId);
+
+            let examSession = new ExamSession(single.examSessionId, single.dateTime, single.seatsAvailable);
+            var result = {
+                student: student,
+                session: examSession
+            }
+        } else {
+            console.log('Oh no! Empty response!!!');
+        }
+        return result || {};
     }
 
+    addStudent(student:Student, action:string) : Observable<Student> {
+        console.log('Adding student:');
+        console.log(student);
+        let body = student;
+        body['action'] = action;
+        let query = '';
+        for (var key in body) {
+            query += encodeURIComponent(key)+"="+encodeURIComponent(body[key])+"&";
+        }
+        query = query.substring(0, query.length - 1);
+        console.log('The body of the post request is');
+        console.log(query);
+        let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        let options = new RequestOptions({ headers: headers });
+        if (action === 'add') {
+            return this.http.post(this.API_URL, query, options)
+                .map(this.extractData)
+                .catch(this.handleError);
+        } else if (action === 'change') {
+            console.log('changing student');
+            return this.http.post(this.API_URL, query, options)
+                .map(this.extractIdData)
+                .catch(this.handleError);
+        } else {
+            console.log('There seems to be an error');
+        }
+    }
+
+    private extractIdData(res: Response) {
+        console.log('The response object (from extractIdData is');
+        console.log(res);
+        if (res.status < 200 || res.status > 300) {
+            throw new Error('Bad response status: ' + res.status);
+        }
+        let body = res.json();
+        console.log('The response that came back(from changing the student was');
+        console.log(body);
+        return body.data || {};
+    }
+
+
+
     private extractData(res: Response) {
+        console.log('The response object is');
+        console.log(res);
         if (res.status < 200 || res.status > 300) {
             throw new Error('Bad response status: ' + res.status);
         }
@@ -65,7 +125,7 @@ export class DataService {
         //let examSessions = this.convertDataToExamSession(body);
         let examSessions: ExamSession[] = [];
         for (let item of body.data) {
-            console.log(item);
+            //console.log(item);
             examSessions.push(
                 new ExamSession(item.examSessionId, item.dateTime, item.seatsAvailable)
             );
@@ -89,6 +149,7 @@ export class DataService {
         console.log('There was an error');
         let errorMsg = error.message;
         console.log(errorMsg);
+        console.log(error);
         return Observable.throw(errorMsg);
     }
 }

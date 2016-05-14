@@ -34,21 +34,19 @@ export class SignupFormComponent implements  OnInit{
             )
     }
 
-    //TODO: Right now we are not doing anything with the student that was added. In the future we might want to update
-    //a list of students that is saved somewhere. Maybe the one that has the list of all students enrolled in the exam
     addStudent (student: Student) {
-        this.dataService.addStudent(student)
-                        .subscribe(
-                            student => {},
-                            error => this.errorMessage = <any>error
-                        );
+        this.dataService.addStudent(student, 'add')
+            .subscribe(
+                student => {},
+                error => this.errorMessage = <any>error
+            );
     }
 
     onSubmit() {
-        this.submitted = true
-        //TODO: Add code to signup student in session
+        this.submitted = true;
+        this.addStudent(this.student);
     }
-    
+
     // TODO: Remove this when we're done
     get diagnostic() {
         return JSON.stringify(this.student);

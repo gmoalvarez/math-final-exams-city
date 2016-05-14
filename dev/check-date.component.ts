@@ -58,6 +58,10 @@ import {ChangeDateComponent} from "./change-date.component";
                 <div *ngIf="found">
                     <h1>Found student</h1>
                     <div class="row">
+                        <div class="col-xs-3">Name</div>
+                        <div class="col-xs-9">{{student.firstName}} {{student.lastName}}</div>
+                    </div>
+                    <div class="row">
                         <div class="col-xs-3">Date</div>
                         <div class="col-xs-9">{{session.date}}</div>
                     </div>
@@ -67,7 +71,8 @@ import {ChangeDateComponent} from "./change-date.component";
                     </div>
                 </div>
                 
-                <my-change-date></my-change-date>
+                <my-change-date [checkDateStudent]="student"
+                                [oldSession]="session"></my-change-date>
 
             </div>
             <div *ngIf="!found && submitted">
@@ -91,23 +96,29 @@ export class CheckDateComponent {
 
     getSessionDetails() {
         this.dataService.getFinalExamSession(this.student)
-                        .subscribe(
-                            session => {
-                                console.log('The session that came back is');
-                                console.log(session);
-                                this.session = session[0];
-                                this.submitted = true;
-                                if (this.session) {
-                                    console.log('Found the session');
-                                    this.found = true;
-                                    console.log('It is ');
-                                    console.log(this.session);
-                                } else {
-                                    this.found = false;
-                                }
-                            },
-                            error => this.errorMessage = <any>error
-                        );
+            .subscribe(
+                result => {
+                    console.log('The result that came back (from getFinalExamSession) is');
+                    console.log(result);
+                    //noinspection TypeScriptUnresolvedVariable
+                    this.session = result.session;
+                    //noinspection TypeScriptUnresolvedVariable
+                    this.student = result.student;
+                    this.submitted = true;
+                    if (this.session && this.student) {
+                        console.log('Found the session');
+                        this.found = true;
+                        console.log('It is ');
+                        console.log(this.session);
+                        console.log(this.student);
+                    } else {
+                        this.found = false;
+                    }
+                    console.log('The student now contains');
+                    console.log(this.student);
+                },
+                error => this.errorMessage = <any>error
+            );
     }
 
     onSubmit() {

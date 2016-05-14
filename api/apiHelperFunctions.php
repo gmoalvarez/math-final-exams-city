@@ -89,12 +89,13 @@ function getStudents($type="all",
 }
 
 function addStudent() {
-
+    error_log('adding student');
+//    var_dump($_POST);
     try {
         $dbHelper = new DatabaseHelper($GLOBALS['dbhost'], $GLOBALS['dbname'], $GLOBALS['dbusername'], $GLOBALS['dbpassword']);
 
         $row = array(
-            "studentId" => "$_POST[csid]",
+            "studentId" => "$_POST[id]",
             "courseCRN" => "$_POST[crn]",
             "firstName" => "$_POST[firstName]",
             "lastName" => "$_POST[lastName]"
@@ -115,7 +116,7 @@ function addStudent() {
         $dbHelper->insert('student', $row);
         //Now lets also add them to the enrollment table
         $row = array(
-            "studentId" => "$_POST[csid]",
+            "studentId" => "$_POST[id]",
             "examSessionId" => "$_POST[examSessionId]"
         );
         $dbHelper->insert('enrollment', $row);
@@ -139,7 +140,7 @@ function changeStudent(){
         $dbHandle = $dbHelper->getConnection();
 
         $newExamSessionId = $_POST['examSessionId'];
-        $studentId = $_POST['csid'];
+        $studentId = $_POST['id'];
         //Lets first get the current student Id.
         // If we find one, we will just update the examSessionId for this student
         //If we do not find one, we will add the student id and examSessionId to the enrollment table
@@ -180,7 +181,16 @@ function changeStudent(){
         }
 
         $dbHelper->closeConnection();
-        return "success";
+        $responseData = array(
+            "studentId" => "$_POST[id]",
+            "examSessionId" => "$_POST[examSessionId]"
+        );
+        $response = array(
+            'data' => $responseData
+        );
+//        error_log('The response will be');
+//        error_log(json_encode($response));
+        return $response;
     } catch(PDOException $e) {
         return $e->getMessage();
     }
@@ -192,7 +202,7 @@ function removeStudentFromSession() {
         $dbHandle = $dbHelper->getConnection();
 
         $row = array(
-            "studentId" => "$_POST[csid]",
+            "studentId" => "$_POST[id]",
             "examSessionId" => "$_POST[examSessionId]",
         );
         //Lets first check to see if the student has already signed up. He should be, but
@@ -204,7 +214,7 @@ function removeStudentFromSession() {
 
         //The student is enrolled in this session, lets remove them from the enrollment table
         $sql = "DELETE FROM enrollment
-                WHERE studentId=$_POST[csid];";
+                WHERE studentId=$_POST[id];";
         $count = $dbHandle->exec($sql); //should be 1 since we will remove one student from enrollment
         if ($count !== 1) {
             return errorResponse("We removed $count students. That is not right!");
