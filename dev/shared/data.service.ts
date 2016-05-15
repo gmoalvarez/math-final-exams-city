@@ -43,15 +43,17 @@ export class DataService {
     }
 
     extractSessionData(res: Response) {
-        console.log('The response object is (should be a single exam session)');
-        console.log(res);
+        //console.log('The response object is (should be a single exam session)');
+        //console.log(res);
         if (res.status < 200 || res.status > 300) {
             throw new Error('Bad response status: ' + res.status);
         }
         let body = res.json();
-        console.log('The response that came back was');
-        console.log(body);
-
+        //console.log('The response that came back was');
+        //console.log(body);
+        if (body.status === 'error') {
+            throw new Error('Error: ' +body.message );
+        }
         if (body.data) {
             let single = body.data[0];
             let student = new Student(single.studentId,
@@ -106,22 +108,31 @@ export class DataService {
             throw new Error('Bad response status: ' + res.status);
         }
         let body = res.json();
-        console.log('The response that came back(from changing or adding the student) was');
-        console.log(body);
+        //console.log('The response that came back(from changing or adding the student) was');
+        //console.log(body);
+
+        if (body.status === 'error') {
+            throw new Error('Error: ' +body.message );
+        }
+
         return body.data || {};
     }
 
 
 
     private extractMultipleSessionsData(res: Response) {
-        console.log('The response object is');
-        console.log(res);
+        //console.log('The response object is');
+        //console.log(res);
         if (res.status < 200 || res.status > 300) {
             throw new Error('Bad response status: ' + res.status);
         }
         let body = res.json();
-        console.log('The response that came back was');
-        console.log(body);
+
+        if (body.status === 'error') {
+            throw new Error('Error: ' +body.message );
+        }
+        //console.log('The response that came back was');
+        //console.log(body);
         //let examSessions = this.convertDataToExamSession(body);
         let examSessions: ExamSession[] = [];
         for (let item of body.data) {
@@ -133,23 +144,11 @@ export class DataService {
         return examSessions || {};
     }
 
-    private convertDataToExamSession(body) {
-        let examSessions: ExamSession[];
-        for (let item of body.data) {
-            //console.log(item);
-            examSessions.push(
-                new ExamSession(item.id, item.dateTime, item.seatsAvailable)
-            );
-        }
-        console.log(examSessions);
-        return examSessions;
-    }
-
     private handleError(error: any) {
         console.log('There was an error');
         let errorMsg = error.message;
         console.log(errorMsg);
-        console.log(error);
+        //console.log(error);
         return Observable.throw(errorMsg);
     }
 }

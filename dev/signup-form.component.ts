@@ -22,6 +22,7 @@ export class SignupFormComponent implements  OnInit{
     duplicate = false;
     sessions: ExamSession[];
     errorMessage: string;
+    chosenSession:ExamSession;
 
     ngOnInit() { this.getSessions()}
 
@@ -45,18 +46,19 @@ export class SignupFormComponent implements  OnInit{
                         console.log('Empty response!');
                         console.log('We need to do something about this');
                     }
+                    this.duplicate = false;
+                    this.submitted = true;
                 },
-                error => this.errorMessage = <any>error
+                error => {
+                    console.log('The error is');
+                    console.log(error);
+                    this.errorMessage = error;
+                    this.duplicate = true;
+                }
             );
     }
 
     onSubmit() {
-        this.submitted = true;
         this.addStudent(this.student);
-    }
-
-    // TODO: Remove this when we're done
-    get diagnostic() {
-        return JSON.stringify(this.student);
     }
 }
