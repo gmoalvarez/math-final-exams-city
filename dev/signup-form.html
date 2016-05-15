@@ -72,7 +72,7 @@
 
     <!--Confirmation Message-->
     <div [hidden]="!submitted">
-        <h2>You submitted the following:</h2>
+        <h2>Congratulations! You are enrolled in the  </h2>
         <div class="row">
             <div class="col-xs-3">First Name</div>
             <div class="col-xs-9  pull-left">{{ student.firstName }}</div>
@@ -92,6 +92,14 @@
         <div class="row">
             <div class="col-xs-3">Exam Session id</div>
             <div class="col-xs-9 pull-left">{{ student.examSessionId }}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-3">Date</div>
+            <div class="col-xs-9 pull-left">{{ chosenSession.date }}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-3">Time</div>
+            <div class="col-xs-9 pull-left">{{ chosenSession.time }}</div>
         </div>
     </div>
 </div>

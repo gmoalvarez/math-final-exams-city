@@ -11,9 +11,9 @@ import {Headers, RequestOptions, URLSearchParams} from "angular2/http";
 export class DataService {
     constructor(private http:Http) { }
 
+    //TODO: Clean up this mess
     private API_URL = 'http://localhost:8888/angular-2-mathfinalexams/api/mathFinals.php'
     private dataUrl = 'http://localhost:8888/angular-2-mathfinalexams/api/mathFinals.php?enrollment=availability'; //URL to web api
-    private singleSessionUrl = 'http://localhost:8888/math_final_exams-API/api/mathFinals.php?enrollment=single&crn=123123&csid=111111';
     // private dataUrl = '../api/mockSessionData.json';
     //These two mock data sources are used to test the check date functionality
     // private singleSessionUrl = '../api/mockSingleStudentSession.json'; //one result

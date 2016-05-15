@@ -22,7 +22,7 @@ export class SignupFormComponent implements  OnInit{
     duplicate = false;
     sessions: ExamSession[];
     errorMessage: string;
-    chosenSession:ExamSession;
+    chosenSession:ExamSession = new ExamSession('','',0);
 
     ngOnInit() { this.getSessions()}
 
@@ -40,12 +40,11 @@ export class SignupFormComponent implements  OnInit{
         this.dataService.addStudent(student, 'add')
             .subscribe(
                 student => {
-                    console.log('The response from addStudent is');
-                    console.log(student);
                     if (Object.keys(student).length === 0 && student.constructor === Object) {
-                        console.log('Empty response!');
-                        console.log('We need to do something about this');
+                        console.log('Empty response from addStudent! This should never happen!!!!!');
                     }
+
+                    this.chosenSession = this.sessions.filter(session=>session.id == student.examSessionId)[0];
                     this.duplicate = false;
                     this.submitted = true;
                 },
