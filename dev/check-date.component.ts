@@ -77,6 +77,7 @@ import {ChangeDateComponent} from "./change-date.component";
                 
                 <my-change-date [checkDateStudent]="student"
                                 [oldSession]="session"
+                                (examSessionChanged)="session = $event"
                                 ></my-change-date>
 
             </div>

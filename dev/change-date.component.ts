@@ -2,6 +2,7 @@ import {Component, OnInit} from "angular2/core";
 import {Student} from "./Student";
 import {ExamSession} from "./exam-session";
 import {DataService} from "./shared/data.service";
+import {EventEmitter} from "angular2/core";
 
 @Component({
     selector: 'my-change-date',
@@ -69,7 +70,8 @@ import {DataService} from "./shared/data.service";
     `,
     providers: [DataService],
     directives: [],
-    inputs: ['student:checkDateStudent','currentSession:oldSession']
+    inputs: ['student:checkDateStudent','currentSession:oldSession'],
+    outputs: ['examSessionChanged']
 })
 
 export class ChangeDateComponent implements OnInit{
@@ -83,6 +85,7 @@ export class ChangeDateComponent implements OnInit{
     errorMessage: string;
     submitted = false;
     found = false;
+    examSessionChanged = new EventEmitter<ExamSession>();
     sessions: ExamSession[];
 
     getSessions() {
@@ -112,7 +115,7 @@ export class ChangeDateComponent implements OnInit{
                     this.currentSession = <ExamSession>this.sessions.filter(session=>session.id == student.examSessionId)[0];
                     console.log('The new current session is ');
                     console.log(this.currentSession);
-                    //TODO: This returns an array with a single element. fix it
+                    this.examSessionChanged.emit(this.currentSession); //tell parent component that we changed the session
                 },
                 error => this.errorMessage = <any>error
             );
