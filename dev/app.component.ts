@@ -22,7 +22,7 @@ import { HTTP_PROVIDERS } from 'angular2/http';
 
 @RouteConfig([
     {
-        path: '/signup', name: 'Signup', component: SignupFormComponent, useAsDefault: true
+        path: '/', name: 'Signup', component: SignupFormComponent, useAsDefault: true
     },
     {
         path: '/check-date', name: 'CheckDate', component: CheckDateComponent
