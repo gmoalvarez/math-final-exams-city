@@ -1,3 +1,4 @@
+import {ExamSession} from "./exam-session";
 export class Student {
 
     constructor(
@@ -5,6 +6,7 @@ export class Student {
         public firstName: string,
         public lastName: string,
         public crn: string,
-        public examSessionId: string
+        public examSessionId: string,
+        public examSession?:ExamSession
     ) {}
 }

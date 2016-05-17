@@ -1,7 +1,7 @@
 <div class="container">
     <div [hidden]="submitted && !duplicate">
         <h1>Signup Form</h1>
-        <form class="form" (ngSubmit)="onSubmit()" #signupForm="ngForm">
+        <form class="form" (ngSubmit)="onSubmit()" #signupForm="ngForm" novalidate>
             <div class="form-group">
                 <label for="first-name">First Name</label>
                 <input [(ngModel)]="student.firstName"
@@ -16,7 +16,8 @@
                 <label for="last-name">Last Name</label>
                 <input [(ngModel)]="student.lastName"
                        ngControl="lastName" #lastName="ngForm"
-                       type="text" class="form-control" required>
+                       type="text" class="form-control" required
+                        >
                 <div [hidden]="lastName.valid || lastName.pristine"
                      class="alert alert-danger">
                     Last name is required
@@ -26,20 +27,22 @@
                 <label for="csid">Student ID</label>
                 <input [(ngModel)]="student.id"
                        ngControl="csid" #studentId="ngForm"
-                       type="text" class="form-control" required>
+                       type="text" class="form-control" required
+                       minlength="7" maxlength="7" pattern="\d{7}">
                 <div [hidden]="studentId.valid || studentId.pristine"
                      class="alert alert-danger">
-                    Student id is required
+                    Valid student id is required (7 digits)
                 </div>
             </div>
             <div class="form-group">
                 <label for="crn">Class CRN</label>
                 <input [(ngModel)]="student.crn"
                        ngControl="crn" #crn="ngForm"
-                       type="text" class="form-control" required>
+                       type="text" class="form-control" required
+                       minlength="5" maxlength="5" pattern="\d{5}">
                 <div [hidden]="crn.valid || crn.pristine"
                      class="alert alert-danger">
-                    Course CRN is required
+                    Course CRN is required (5 digits)
                 </div>
             </div>
             <div class="form-group">

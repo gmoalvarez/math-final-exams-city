@@ -5,7 +5,7 @@
     <databaseInfo>
         <version>134481920</version>
         <UUID>98D019E2-4431-47A7-B794-B14E84426159</UUID>
-        <nextObjectID>101</nextObjectID>
+        <nextObjectID>102</nextObjectID>
         <metadata>
             <plist version="1.0">
                 <dict>
@@ -60,4 +60,9 @@
             </plist>
         </metadata>
     </databaseInfo>
+    <object type="LMCOOKIEJAR" id="z102">
+        <attribute name="uuid" type="string">550A9385-562F-494E-8F8B-48E7C00DC418</attribute>
+        <attribute name="order" type="int64">1</attribute>
+        <attribute name="name" type="string">Default Jar</attribute>
+    </object>
 </database>

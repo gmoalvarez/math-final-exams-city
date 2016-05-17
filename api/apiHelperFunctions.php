@@ -100,6 +100,11 @@ function addStudent() {
             "firstName" => "$_POST[firstName]",
             "lastName" => "$_POST[lastName]"
         );
+        //First lets validate the fields
+        $invalidFields = invalidFields();
+        if($invalidFields !== '') {
+            return errorResponse("The following fields are invalid: $invalidFields");
+        }
         //Lets first check to see if the student has already signed up. If so, we should
         //prompt them to change instead
         $sql = "SELECT * FROM student WHERE studentId=$_POST[id]";
@@ -112,6 +117,7 @@ function addStudent() {
         if(count($result) >=1) {
             return errorResponse('Student is already signed up. Change instead');
         }
+
         //Lets make sure there is enough space in a session (this is checked client side but what if
         //two requests come in at the same time?
         if (!seatAvailableInSessionWithId($_POST['examSessionId'])) {
@@ -143,6 +149,23 @@ function addStudent() {
     } catch(PDOException $e) {
         return $e->getMessage();
     }
+}
+
+function invalidFields() {
+    $invalidFields = '';
+    $keys = ['id','crn','firstName','lastName','examSessionId'];
+
+    foreach ($keys as $key) {
+        if (!isset($_POST["$key"])) {
+            $invalidFields += ' ' . $key;
+        }
+    }
+
+    $studentIdPattern = '/^\d{7}$/';
+    if (!preg_match($studentIdPattern, $_POST['id'])) {
+        $invalidFields += ', invalid student Id';
+    }
+    return $invalidFields;
 }
 
 function changeStudent(){

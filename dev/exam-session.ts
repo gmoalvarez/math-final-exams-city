@@ -5,7 +5,7 @@ export class ExamSession {
     constructor(
         public id: string,
         public dateTime: string,
-        public seatsAvailable: number
+        public seatsAvailable?: number
     ) {
         this.id = id;
         this.seatsAvailable = seatsAvailable;

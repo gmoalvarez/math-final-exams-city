@@ -10,14 +10,12 @@ Student POST Requests:
 1) Add student to exam session and to student table
 2) Change student exam time to a different day and time
 
-
 Instructor GET Requests
 
 1) Fetch all student data
 2) Fetch all student data from your course
 
-TODO
+TODO:
 
 1) Change CRN to a dropdown or radio list instead of a field or limit only to existing courses
-2)reset forms
-3)handle duplicate student
+2) Add Course checkboxes to student list so the list can be filtered by course

@@ -19,6 +19,42 @@ export class DataService {
     // private singleSessionUrl = '../api/mockSingleStudentSession.json'; //one result
     // private singleSessionUrl = '../api/mockNoStudentSession.json';  //no result
 
+    getStudentEnrollmentList(): Observable<Student[]> {
+        let params = new URLSearchParams();
+        params.set('enrollment', 'all');
+        return this.http.get(this.API_URL, {search: params})
+            .map(this.extractStudentEnrollmentListData)
+            .catch(this.handleError);
+    }
+
+    private extractStudentEnrollmentListData(res: Response) {
+        if (res.status < 200 || res.status > 300) {
+            throw new Error('Bad response status: ' + res.status);
+        }
+        let body = res.json();
+        console.log('The response that came back was');
+        console.log(body);
+        if (body.status === 'error') {
+            throw new Error('Error: ' +body.message );
+        }
+        let students: Student[] = [];
+        for (let item of body.data) {
+
+            let examSession = new ExamSession(item.examSessionId, item.dateTime);
+
+            students.push(
+                new Student(item.studentId,
+                    item.firstName,
+                    item.lastName,
+                    item.courseCrn,
+                    item.examSessionId,
+                    examSession)
+            );
+
+        }
+        return students || {};
+    }
+
     getExamSessions(): Observable<ExamSession[]> {
         //let parameters = '';
         return this.http.get(this.dataUrl)
@@ -33,10 +69,10 @@ export class DataService {
         params.set('enrollment', 'single');
         params.set('crn', student.crn);
         params.set('csid', student.id);
-        console.log('Getting final exam session for student');
-        console.log(student);
-        console.log('The params that we are sending are');
-        console.log(params);
+        // console.log('Getting final exam session for student');
+        // console.log(student);
+        // console.log('The params that we are sending are');
+        // console.log(params);
         return this.http.get(this.API_URL, {search: params})
             .map(this.extractSessionData)
             .catch(this.handleError)

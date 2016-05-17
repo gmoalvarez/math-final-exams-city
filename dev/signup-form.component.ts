@@ -17,7 +17,7 @@ import {Observable} from "rxjs/Observable";
 export class SignupFormComponent implements  OnInit{
     constructor(private dataService:DataService) {}
 
-    student = new Student('111111', 'Guillermo', 'Alvarez', '12343', '1');
+    student = new Student('', '', '', '', '');
     submitted = false;
     duplicate = false;
     sessions: ExamSession[];
